@@ -1,9 +1,9 @@
 exports.mainController = (req, res, next) => {
-    res.send("hello from main controller");
+    res.render('index')
 }
 
 exports._404Controller = (req, res, next) => {
-    res.send("<h1>404 page not found</h1>");
+    res.render('404')
 }
 
 

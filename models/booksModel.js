@@ -1,30 +1,20 @@
-const fs = require("fs")
-
-const { globalPath } = require("../utils/index")
-
-const path = require("path")
+const db = require("../utils/database");
 
 class Book{
-    constructor(name) {
+    constructor(name, author, price, description) {
         this.name = name
+        this.author = author
+        this.price = price
+        this.description = description
     }
     addBook(){
-        let books = Book.getAll()
-        books = [...books, this]
-        fs.writeFile(path.join(globalPath,'.data','books.json'), JSON.stringify(books), err => {
-            if(!err)
-                console.log("File written successfully")
-            else
-                console.log("Error in writing file")
-        })
+        return db.execute(`INSERT INTO books (name,author,price,description) VALUES ('${this.name}','${this.author}','${this.price}','${this.description}')`)
+    }
+    static bookById(id){
+        return db.execute(`SELECT * FROM books WHERE id=${id}`)
     }
     static getAll(){
-        try{
-            return JSON.parse(fs.readFileSync(path.join(globalPath,'.data','books.json')).toString())
-        }
-        catch{
-            return []
-        }
+        return db.execute('SELECT * FROM books')
     }
 }
 

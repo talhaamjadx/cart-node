@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+</head>
+<body>
+    <div>
+        <% for(let i = 0; i < books.length; i++){ %>
+            <form style="margin-bottom: 5px;" method="post" action="/books/book/edit/<%= books[i].id %>">
+                <div>
+                    <label for="">Name: <%= books[i].name %></label>
+                    <label for="">Author: <%= books[i].author %></label>
+                    <label for="">Price: <%= books[i].price %></label>
+                    <label for="">Description: <%= books[i].description %></label>
+                    <input type="text" name="id" value="<%= books[i].id %>" hidden>
+                    <input type="text" name="name" value="<%= books[i].name %>" hidden>
+                    <input type="text" name="author" value="<%= books[i].author %>" hidden>
+                    <input type="text" name="price" value="<%= books[i].price %>" hidden>
+                    <input type="text" name="description" value="<%= books[i].description %>" hidden>
+                </div>
+                <button type="submit">Edit</button>
+            </form>
+            <form method="post" action="/books/book/delete/<%= books[i].id %>">
+                <button type="submit">Delete</button>
+            </form>
+        <% } %>
+    </div>
+</body>
+</html>

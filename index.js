@@ -21,8 +21,7 @@ app.use('/books', booksRouter)
 
 app.use(mainRouter)
 
-sequelize.sync().then(res => {
-    console.log(res)
+sequelize.sync().then(() => {
     app.listen(4000, () => console.log("Server is running on port 4000"))
 })
 .catch(err => {

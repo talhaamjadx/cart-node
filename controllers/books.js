@@ -5,28 +5,61 @@ exports.addBookController = (req, res, next) => {
 }
 
 exports.fetchBooksController = (req, res, next) => {
-    BookModel.getAll().then(([rows, columns]) => {
-        res.send(rows)
-    })
-    .catch(err => res.send(err))
-}
-
-exports.bookByIdController = (req, res, next) => {
-    BookModel.bookById(req.params.id)
-    .then(([rows]) => {
-        if(rows.length > 0)
-            res.render('single-book', { book: rows[0]})
-        else
-            res.send('no book against this id')
+    BookModel.findAll()
+    .then(result => {
+        res.render('all-books', { books: result})
     })
     .catch(err => {
         res.send(err)
     })
 }
 
+exports.bookByIdController = (req, res, next) => {
+    BookModel.findByPk(req.params.id)
+    .then(result => {
+        res.render('single-book', { book: result.dataValues })
+    })
+    .catch(err => {
+        res.send(err)
+    })
+}
+
+exports.editBookController = (req, res, next) => {
+    res.render("edit-book", {book:req.body})
+}
+
+exports.getEditBookController = (req, res, next) => {
+    BookModel.update(req.body, { where: { id: req.params.id } })
+    .then(result => {
+        res.redirect('/books/book/'+req.params.id)
+    })
+    .catch(err => {
+        res.send(err)
+    })
+}
+
+exports.deleteBookController = (req, res, next) => {
+   BookModel.destroy({
+       where: {
+           id: req.params.id
+       }
+   })
+   .then(() => {
+       res.redirect('/books/all-books')
+   })
+   .catch(err => {
+       res.send(err)
+   })
+}
+
 exports.saveBookController = (req, res, next) => {
-    const book = new BookModel(req.body.bookName,req.body.bookAuthor,req.body.bookPrice,req.body.bookDescription)
-    book.addBook().then(() => {
+    BookModel.create({
+        name: req.body.bookName,
+        author: req.body.bookAuthor,
+        price: req.body.bookPrice,
+        description: req.body.bookDescription,
+    })
+    .then(() => {
         res.redirect('/')
     })
     .catch(err => {

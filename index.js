@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
+const sequelize = require('./utils/database');
 
 const path = require("path")
 
@@ -20,4 +21,10 @@ app.use('/books', booksRouter)
 
 app.use(mainRouter)
 
-app.listen(4000, () => console.log("Server is running on port 4000"))
+sequelize.sync().then(res => {
+    console.log(res)
+    app.listen(4000, () => console.log("Server is running on port 4000"))
+})
+.catch(err => {
+    console.log({err})
+})

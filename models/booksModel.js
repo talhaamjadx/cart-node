@@ -1,21 +1,30 @@
-const db = require("../utils/database");
+const Sequelize = require('sequelize');
 
-class Book{
-    constructor(name, author, price, description) {
-        this.name = name
-        this.author = author
-        this.price = price
-        this.description = description
+const sequelize = require('../utils/database');
+
+const Book = sequelize.define('books', {
+    id:{
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    name: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+    },
+    author: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+    },
+    price: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+    },
+    description: {
+        type: Sequelize.STRING(255),
+        allowNull: false
     }
-    addBook(){
-        return db.execute(`INSERT INTO books (name,author,price,description) VALUES ('${this.name}','${this.author}','${this.price}','${this.description}')`)
-    }
-    static bookById(id){
-        return db.execute(`SELECT * FROM books WHERE id=${id}`)
-    }
-    static getAll(){
-        return db.execute('SELECT * FROM books')
-    }
-}
+})
 
 module.exports = Book

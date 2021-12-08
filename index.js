@@ -7,8 +7,8 @@ const User = require("./models/usersModel")
 const Book = require("./models/booksModel")
 const Cart = require("./models/cartModel")
 const CartBook = require("./models/cartBookModel")
-
-const { DataTypes } = require("sequelize");
+const Order = require("./models/orderModel")
+const OrderBook = require("./models/orderBook")
 
 const path = require("path")
 
@@ -57,6 +57,10 @@ Cart.belongsTo(User, {
 User.hasOne(Cart)
 Cart.belongsToMany(Book, { through: CartBook })
 Book.belongsToMany(Cart, { through: CartBook })
+User.hasMany(Order)
+Order.belongsTo(User)
+Order.belongsToMany(Book, { through: OrderBook })
+Book.belongsToMany(Order, { through: OrderBook })
 
 sequelize.sync().then(() => {
     return User.findByPk(1)

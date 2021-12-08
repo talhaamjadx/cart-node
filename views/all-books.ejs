@@ -1,7 +1,10 @@
 <%- include("./header.ejs") %>
     <div>
         <h1>Books</h1>
+        <% if(!books.length){ %>
+        <p>No books</p>
         <hr>
+        <% } %>
         <% for(let i=0; i < books.length; i++){ %>
             <form style="margin-bottom: 5px;" method="post" action="/books/book/edit/<%= books[i].id %>">
                 <div>

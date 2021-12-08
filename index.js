@@ -5,6 +5,10 @@ const sequelize = require('./utils/database');
 
 const User = require("./models/usersModel")
 const Book = require("./models/booksModel")
+const Cart = require("./models/cartModel")
+const CartBook = require("./models/cartBookModel")
+
+const { DataTypes } = require("sequelize");
 
 const path = require("path")
 
@@ -12,15 +16,17 @@ const mainRouter = require('./routes/main')
 
 const booksRouter = require('./routes/books')
 
+const CartRouter = require('./routes/cart')
+
 app.use((req, res, next) => {
     User.findByPk(1)
-    .then(user => {
-        req.user = user
-        next();
-    })
-    .catch(err => {
-        res.send(err)
-    })
+        .then(user => {
+            req.user = user
+            next();
+        })
+        .catch(err => {
+            res.send(err)
+        })
 })
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -33,6 +39,8 @@ app.set("view engine", "ejs")
 
 app.use('/books', booksRouter)
 
+app.use(CartRouter)
+
 app.use(mainRouter)
 
 User.hasMany(Book, {
@@ -41,6 +49,14 @@ User.hasMany(Book, {
     }
 })
 Book.belongsTo(User)
+Cart.belongsTo(User, {
+    constraints: true, onDelete: 'CASCADE', foreignKey: {
+        allowNull: false
+    }
+})
+User.hasOne(Cart)
+Cart.belongsToMany(Book, { through: CartBook })
+Book.belongsToMany(Cart, { through: CartBook })
 
 sequelize.sync().then(() => {
     return User.findByPk(1)

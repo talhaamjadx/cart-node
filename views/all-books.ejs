@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books</title>
-</head>
-<body>
+<%- include("./header.ejs") %>
     <div>
         <h1>Books</h1>
         <hr>
-        <% for(let i = 0; i < books.length; i++){ %>
+        <% for(let i=0; i < books.length; i++){ %>
             <form style="margin-bottom: 5px;" method="post" action="/books/book/edit/<%= books[i].id %>">
                 <div>
                     <label for="">Name: <%= books[i].name %></label>
@@ -32,7 +24,6 @@
                 <button type="submit">Add to cart</button>
             </form>
             <hr>
-        <% } %>
+            <% } %>
     </div>
-</body>
-</html>
+<%- include("./footer.ejs") %>

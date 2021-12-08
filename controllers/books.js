@@ -53,14 +53,14 @@ exports.deleteBookController = (req, res, next) => {
 }
 
 exports.saveBookController = (req, res, next) => {
-    BookModel.create({
+    req.user.createBook({
         name: req.body.bookName,
         author: req.body.bookAuthor,
         price: req.body.bookPrice,
-        description: req.body.bookDescription,
+        description: req.body.bookDescription
     })
-    .then(() => {
-        res.redirect('/')
+    .then((result) => {
+        res.redirect('/books/book/'+result.dataValues.id)
     })
     .catch(err => {
         res.send(err)

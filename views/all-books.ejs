@@ -8,6 +8,8 @@
 </head>
 <body>
     <div>
+        <h1>Books</h1>
+        <hr>
         <% for(let i = 0; i < books.length; i++){ %>
             <form style="margin-bottom: 5px;" method="post" action="/books/book/edit/<%= books[i].id %>">
                 <div>
@@ -26,6 +28,10 @@
             <form method="post" action="/books/book/delete/<%= books[i].id %>">
                 <button type="submit">Delete</button>
             </form>
+            <form method="post" action="/cart/add/<%= books[i].id %>">
+                <button type="submit">Add to cart</button>
+            </form>
+            <hr>
         <% } %>
     </div>
 </body>

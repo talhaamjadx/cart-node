@@ -1,8 +1,10 @@
 <%- include("./header.ejs") %>
     <h1>Cart</h1>
+    <% if(books.length > 0){ %>
     <form method="post" action="/orders/create">
         <button type="submit">Create Order</button>
     </form>
+    <% } %>
     <% if(!books.length){ %>
         <p>Cart is empty</p>
         <hr>

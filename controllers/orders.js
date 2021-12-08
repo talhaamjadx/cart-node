@@ -31,7 +31,7 @@ exports.createOrderController = (req, res, next) => {
         return fetchedCart.setBooks(null)
     })
     .then(() => {
-        res.redirect("/")
+        res.redirect("/orders")
     })
     .catch(err => {
         console.log(err)

@@ -1,6 +1,7 @@
 <%- include("./header.ejs") %>
     <div>
         <h1>Orders (<%= orders.length %>)</h1>
+        <hr>
         <% for(let i=0; i < orders.length; i++){ %>
             <ul>
                 <% for(let j=0; j < orders[i].books.length; j++){ %>
@@ -9,6 +10,7 @@
                     </li>
                     <% } %>
             </ul>
+            <hr>
             <% } %>
     </div>
     <%- include("./footer.ejs") %>

@@ -1,11 +1,23 @@
 const Book = require("../models/booksModel")
 
 exports.getCartController = (req, res, next) => {
+    console.log(req.user)
     req.user.getCart()
         .then(cart => {
-            return cart.getBooks()
+            if (!cart) {
+                return req.user.createCart()
+                    .then(cart => {
+                        return cart.getBooks()
+                    })
+                    .catch(err => {
+                        res.send(err)
+                    })
+            }
+            else
+                return cart.getBooks()
         })
         .then(books => {
+            console.log("in here")
             res.render('cart', { books: books })
         })
         .catch(err => {

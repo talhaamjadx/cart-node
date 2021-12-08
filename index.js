@@ -18,6 +18,8 @@ const booksRouter = require('./routes/books')
 
 const CartRouter = require('./routes/cart')
 
+const OrderRouter = require('./routes/orders')
+
 app.use((req, res, next) => {
     User.findByPk(1)
         .then(user => {
@@ -26,7 +28,7 @@ app.use((req, res, next) => {
         })
         .catch(err => {
             res.send(err)
-        })
+        })    
 })
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -40,6 +42,8 @@ app.set("view engine", "ejs")
 app.use('/books', booksRouter)
 
 app.use(CartRouter)
+
+app.use(OrderRouter)
 
 app.use(mainRouter)
 
@@ -66,6 +70,7 @@ sequelize.sync().then(() => {
     return User.findByPk(1)
 })
     .then(user => {
+        console.log(Object.keys(Cart.prototype))
         if (!user)
             return User.create({
                 email: "talhaamjadx@live.com",

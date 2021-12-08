@@ -1,25 +1,28 @@
 <%- include("./header.ejs") %>
     <h1>Cart</h1>
+    <form method="post" action="/orders/create">
+        <button type="submit">Create Order</button>
+    </form>
     <% if(!books.length){ %>
         <p>Cart is empty</p>
         <hr>
-    <% } %>
-    <% for(let i=0; i < books.length; i++){ %>
-        <div style="margin-bottom: 5px;">
-            <p>Name: <%= books[i].name %>
-            </p>
-            <p>Author: <%= books[i].author %>
-            </p>
-            <p>Price: <%= books[i].price %>
-            </p>
-            <p>Description: <%= books[i].description %>
-            </p>
-            <p>Quantity: <%= books[i].cartbook.quantity %>
-            </p>
-            <form method="post" action="/cart/remove-item/<%= books[i].id %>">
-                <button type="submit">Delete</button>
-            </form>
-        </div>
-        <hr>
         <% } %>
-<%- include("./footer.ejs") %>
+            <% for(let i=0; i < books.length; i++){ %>
+                <div style="margin-bottom: 5px;">
+                    <p>Name: <%= books[i].name %>
+                    </p>
+                    <p>Author: <%= books[i].author %>
+                    </p>
+                    <p>Price: <%= books[i].price %>
+                    </p>
+                    <p>Description: <%= books[i].description %>
+                    </p>
+                    <p>Quantity: <%= books[i].cartbook.quantity %>
+                    </p>
+                    <form method="post" action="/cart/remove-item/<%= books[i].id %>">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+                <hr>
+                <% } %>
+                    <%- include("./footer.ejs") %>

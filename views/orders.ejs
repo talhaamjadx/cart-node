@@ -4,9 +4,9 @@
         <hr>
         <% for(let i=0; i < orders.length; i++){ %>
             <ul>
-                <% for(let j=0; j < orders[i].books.length; j++){ %>
+                <% for(let j=0; j < orders[i].orderId.books.length; j++){ %>
                     <li>
-                        <%= orders[i].books[j].name %> (<%= orders[i].books[j].quantity %>)
+                        <%= orders[i].orderId.books[j].bookId.name %> (<%= orders[i].orderId.books[j].quantity %>)
                     </li>
                     <% } %>
             </ul>

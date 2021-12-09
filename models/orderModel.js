@@ -1,14 +1,27 @@
-const getDb = require("mongodb").getDb
+const mongoose = require("mongoose")
 
-class Order{
-    constructor(userId, books){
-        this.userId = userId
-        this.books = books
-    }
-    create(){
-        const db = getDb();
-        return db.collection("orders").insertOne(this)
-    }
-}
+const Schema = mongoose.Schema
 
-module.exports = Order
+const OrderSchema = new Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'user'
+    },
+    books: [
+        {
+            bookId: {
+                type: Schema.Types.ObjectId,
+                required: true,
+                ref: 'books'
+            },
+            quantity: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+    testing: Object
+})
+
+module.exports = mongoose.model("order", OrderSchema)

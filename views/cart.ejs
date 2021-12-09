@@ -11,17 +11,17 @@
         <% } %>
             <% for(let i=0; i < books.length; i++){ %>
                 <div style="margin-bottom: 5px;">
-                    <p>Name: <%= books[i].name %>
+                    <p>Name: <%= books[i].bookId.name %>
                     </p>
-                    <p>Author: <%= books[i].author %>
+                    <p>Author: <%= books[i].bookId.author %>
                     </p>
-                    <p>Price: <%= books[i].price %>
+                    <p>Price: <%= books[i].bookId.price %>
                     </p>
-                    <p>Description: <%= books[i].description %>
+                    <p>Description: <%= books[i].bookId.description %>
                     </p>
                     <p>Quantity: <%= books[i].quantity %>
                     </p>
-                    <form method="post" action="/cart/remove-item/<%= books[i]._id %>">
+                    <form method="post" action="/cart/remove-item/<%= books[i].bookId._id %>">
                         <button type="submit">Delete</button>
                     </form>
                 </div>

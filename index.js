@@ -4,21 +4,25 @@ const bodyParser = require('body-parser')
 
 const path = require("path")
 
+const mongoose = require("mongoose")
+
+const User = require("./models/usersModel")
+
 const mainRouter = require('./routes/main')
 
 const booksRouter = require('./routes/books')
 
-let user = null;
+let globalUser = null;
 
-const User = require("./models/usersModel");
+// const User = require("./models/usersModel");
 const CartRouter = require('./routes/cart')
 
 const OrderRouter = require('./routes/orders')
 
-const mongoClient = require("./utils/database").mongoClient;
+// const mongoClient = require("./utils/database").mongoClient;
 
 app.use((req, res, next) => {
-    req.user = user
+    req.user = globalUser
     next()
 })
 
@@ -38,28 +42,34 @@ app.use(OrderRouter)
 
 app.use(mainRouter)
 
-mongoClient(() => {
-    User.findAll()
-        .then(res => {
-            if (!res.length) {
-                const newUser = new User("Talha", "talhaamjadx@live.com", "iamnumber4", { items: [] })
-                return newUser.save()
-                .then(res => {
-                    return new User("Talha", "talhaamjadx@live.com", "iamnumber4", { items: [] }, [],  res.insertedId)
+mongoose.connect('mongodb+srv://talha_789:iamnumber4@cluster0.jbkor.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+    .then(() => {
+        return User.find()
+        .then(users => {
+            if(!users.length){
+                const user = new User({
+                    name: "Talha",
+                    email: "talhaamjadx@live.com",
+                    password: "iamnumber4",
+                    cart: { items: [] },
+                    orders: []
                 })
-                .catch(err => {
-                    return err
-                })
+                return user.save()
             }
-            else {
-                return new Promise((resolve, reject) => res[0] ? resolve(new User(res[0].name, res[0].email,res[0].password,res[0].cart, res[0].orders, res[0]._id)) : reject("User is null"))
+            else{
+                return new Promise(resolve => resolve(users[0]))
             }
         })
-        .then((res) => {
-            user = res
-            app.listen(4000, () => console.log("server is running on port 4000"))
+        .then(user => {
+            globalUser = user
         })
         .catch(err => {
-            console.log(err)
+            return new Promise((resolve, reject) => reject(err))
         })
-})
+    })
+    .then(() => {
+        app.listen(4000, () => console.log("Server is running on port 4000"))
+    })
+    .catch(err => {
+        console.log(err)
+    })

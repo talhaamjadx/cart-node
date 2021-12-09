@@ -1,3 +1,4 @@
+const { populate } = require("../models/booksModel");
 const Book = require("../models/booksModel");
 
 exports.addBookController = (req, res, next) => {
@@ -5,7 +6,8 @@ exports.addBookController = (req, res, next) => {
 }
 
 exports.fetchBooksController = (req, res, next) => {
-    Book.fetchAll()
+    Book.find()
+    .populate('userId')
     .then(result => {
         console.log(result)
         res.render('all-books', { books: result})
@@ -16,7 +18,7 @@ exports.fetchBooksController = (req, res, next) => {
 }
 
 exports.bookByIdController = (req, res, next) => {
-    Book.fetchOne(req.params.id)
+    Book.findById(req.params.id)
     .then(result => {
         res.render('single-book', { book: result })
     })
@@ -30,8 +32,14 @@ exports.editBookController = (req, res, next) => {
 }
 
 exports.getEditBookController = (req, res, next) => {
-    const book = new Book(req.body.name, req.body.author, req.body.price, req.body.description, req.params.id, req.user._id)
-    book.save()
+    Book.findById(req.params.id)
+    .then(book => {
+        book.name = req.body.name
+        book.price = req.body.price
+        book.author = req.body.author
+        book.description = req.body.description
+        return book.save()
+    })
     .then(() => {
         res.redirect('/books/book/'+req.params.id)
     })
@@ -42,7 +50,7 @@ exports.getEditBookController = (req, res, next) => {
 }
 
 exports.deleteBookController = (req, res, next) => {
-   Book.deleteBook(req.params.id)
+   Book.findByIdAndDelete(req.params.id)
    .then(() => {
        res.redirect('/books/all-books')
    })
@@ -52,7 +60,7 @@ exports.deleteBookController = (req, res, next) => {
 }
 
 exports.saveBookController = (req, res, next) => {
-    const book = new Book(req.body.bookName, req.body.bookAuthor, req.body.bookPrice, req.body.bookDescription, null, req.user._id)
+    const book = new Book({ name: req.body.bookName, author: req.body.bookAuthor, price: req.body.bookPrice, description: req.body.bookDescription, userId: req.user})
     book.save()
         .then(result => {
             console.log(result)

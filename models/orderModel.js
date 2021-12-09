@@ -1,14 +1,14 @@
-const { DataTypes } = require("sequelize")
+const getDb = require("mongodb").getDb
 
-const sequelize = require("../utils/database")
-
-const Order = sequelize.define('order', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true
+class Order{
+    constructor(userId, books){
+        this.userId = userId
+        this.books = books
     }
-})
+    create(){
+        const db = getDb();
+        return db.collection("orders").insertOne(this)
+    }
+}
 
 module.exports = Order

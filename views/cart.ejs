@@ -19,9 +19,9 @@
                     </p>
                     <p>Description: <%= books[i].description %>
                     </p>
-                    <p>Quantity: <%= books[i].cartbook.quantity %>
+                    <p>Quantity: <%= books[i].quantity %>
                     </p>
-                    <form method="post" action="/cart/remove-item/<%= books[i].id %>">
+                    <form method="post" action="/cart/remove-item/<%= books[i]._id %>">
                         <button type="submit">Delete</button>
                     </form>
                 </div>

@@ -1,14 +1,6 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
-const sequelize = require('./utils/database');
-
-const User = require("./models/usersModel")
-const Book = require("./models/booksModel")
-const Cart = require("./models/cartModel")
-const CartBook = require("./models/cartBookModel")
-const Order = require("./models/orderModel")
-const OrderBook = require("./models/orderBook")
 
 const path = require("path")
 
@@ -16,19 +8,18 @@ const mainRouter = require('./routes/main')
 
 const booksRouter = require('./routes/books')
 
+let user = null;
+
+const User = require("./models/usersModel");
 const CartRouter = require('./routes/cart')
 
 const OrderRouter = require('./routes/orders')
 
+const mongoClient = require("./utils/database").mongoClient;
+
 app.use((req, res, next) => {
-    User.findByPk(1)
-        .then(user => {
-            req.user = user
-            next();
-        })
-        .catch(err => {
-            res.send(err)
-        })    
+    req.user = user
+    next()
 })
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -47,40 +38,28 @@ app.use(OrderRouter)
 
 app.use(mainRouter)
 
-User.hasMany(Book, {
-    constraints: true, onDelete: 'CASCADE', foreignKey: {
-        allowNull: false
-    }
+mongoClient(() => {
+    User.findAll()
+        .then(res => {
+            if (!res.length) {
+                const newUser = new User("Talha", "talhaamjadx@live.com", "iamnumber4", { items: [] })
+                return newUser.save()
+                .then(res => {
+                    return new User("Talha", "talhaamjadx@live.com", "iamnumber4", { items: [] }, [],  res.insertedId)
+                })
+                .catch(err => {
+                    return err
+                })
+            }
+            else {
+                return new Promise((resolve, reject) => res[0] ? resolve(new User(res[0].name, res[0].email,res[0].password,res[0].cart, res[0].orders, res[0]._id)) : reject("User is null"))
+            }
+        })
+        .then((res) => {
+            user = res
+            app.listen(4000, () => console.log("server is running on port 4000"))
+        })
+        .catch(err => {
+            console.log(err)
+        })
 })
-Book.belongsTo(User)
-Cart.belongsTo(User, {
-    constraints: true, onDelete: 'CASCADE', foreignKey: {
-        allowNull: false
-    }
-})
-User.hasOne(Cart)
-Cart.belongsToMany(Book, { through: CartBook })
-Book.belongsToMany(Cart, { through: CartBook })
-User.hasMany(Order)
-Order.belongsTo(User)
-Order.belongsToMany(Book, { through: OrderBook })
-Book.belongsToMany(Order, { through: OrderBook })
-
-sequelize.sync().then(() => {
-    return User.findByPk(1)
-})
-    .then(user => {
-        console.log(Object.keys(Cart.prototype))
-        if (!user)
-            return User.create({
-                email: "talhaamjadx@live.com",
-                password: "iamnumber4"
-            })
-        return user
-    })
-    .then(() => {
-        app.listen(4000, () => console.log("Server is running on port 4000"))
-    })
-    .catch(err => {
-        console.log({ err })
-    })

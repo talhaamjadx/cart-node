@@ -1,12 +1,13 @@
-const BookModel = require("../models/booksModel");
+const Book = require("../models/booksModel");
 
 exports.addBookController = (req, res, next) => {
     res.render("add-book")
 }
 
 exports.fetchBooksController = (req, res, next) => {
-    BookModel.findAll()
+    Book.fetchAll()
     .then(result => {
+        console.log(result)
         res.render('all-books', { books: result})
     })
     .catch(err => {
@@ -15,9 +16,9 @@ exports.fetchBooksController = (req, res, next) => {
 }
 
 exports.bookByIdController = (req, res, next) => {
-    BookModel.findByPk(req.params.id)
+    Book.fetchOne(req.params.id)
     .then(result => {
-        res.render('single-book', { book: result.dataValues })
+        res.render('single-book', { book: result })
     })
     .catch(err => {
         res.send(err)
@@ -29,21 +30,19 @@ exports.editBookController = (req, res, next) => {
 }
 
 exports.getEditBookController = (req, res, next) => {
-    BookModel.update(req.body, { where: { id: req.params.id } })
-    .then(result => {
+    const book = new Book(req.body.name, req.body.author, req.body.price, req.body.description, req.params.id, req.user._id)
+    book.save()
+    .then(() => {
         res.redirect('/books/book/'+req.params.id)
     })
     .catch(err => {
+        console.log(err)
         res.send(err)
     })
 }
 
 exports.deleteBookController = (req, res, next) => {
-   BookModel.destroy({
-       where: {
-           id: req.params.id
-       }
-   })
+   Book.deleteBook(req.params.id)
    .then(() => {
        res.redirect('/books/all-books')
    })
@@ -53,16 +52,14 @@ exports.deleteBookController = (req, res, next) => {
 }
 
 exports.saveBookController = (req, res, next) => {
-    req.user.createBook({
-        name: req.body.bookName,
-        author: req.body.bookAuthor,
-        price: req.body.bookPrice,
-        description: req.body.bookDescription
-    })
-    .then((result) => {
-        res.redirect('/books/book/'+result.dataValues.id)
-    })
-    .catch(err => {
-        res.send(err)
-    })
+    const book = new Book(req.body.bookName, req.body.bookAuthor, req.body.bookPrice, req.body.bookDescription, null, req.user._id)
+    book.save()
+        .then(result => {
+            console.log(result)
+            res.redirect("/books/all-books")
+        })
+        .catch(err => {
+            console.log(err)
+            res.send(err)
+        })
 }

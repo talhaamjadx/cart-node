@@ -6,7 +6,7 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
     // res.setHeader("Set-Cookie", "loggedIn=true");
-    User.findById("61b2f815bc6a0dbc003b3471")
+    User.findById("61b6f6f3e9a437ce225ca143")
         .then(user => {
             req.session.isLoggedIn = true
             req.session.user = user

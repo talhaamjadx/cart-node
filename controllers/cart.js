@@ -1,4 +1,3 @@
-const { ExclusionConstraintError } = require("sequelize/dist");
 const Book = require("../models/booksModel");
 
 exports.getCartController = (req, res, next) => {
@@ -24,6 +23,7 @@ exports.cartItemRemoveController = (req, res, next) => {
 exports.addBookToCartController = (req, res, next) => {
     Book.findById(req.params.id)
         .then(book => {
+            console.log(req.user, "user")
             return req.user.addToCart(book)
         })
         .then(result => {

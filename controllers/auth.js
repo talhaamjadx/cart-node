@@ -1,5 +1,13 @@
 const User = require("../models/usersModel");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const sendGridTransport = require("nodemailer-sendgrid-transport")
+
+const transporter = nodemailer.createTransport(sendGridTransport({
+    auth:{
+        api_key: "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"
+    }
+}))
 
 exports.getLogin = (req, res, next) => {
     res.render("login")
@@ -46,6 +54,12 @@ exports.postSignup = (req, res, next) => {
         .then(result => {
             console.log(result)
             res.redirect("/login")
+            return transporter.sendMail({
+                to: req.body.email,
+                from: "talhaamjadx@live.com",
+                subject: "Testing email. Does it work?",
+                html: "<h1>This is a heading</h1>"
+            })
         })
         .catch(err => {
             console.log(err)

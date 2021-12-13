@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
@@ -10,7 +11,7 @@ const session = require("express-session");
 
 const MongoDBStore = require("connect-mongodb-session")(session)
 
-const MongoDBUri = "mongodb+srv://talha_789:iamnumber4@cluster0.jbkor.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const MongoDBUri = process.env.MONGO_DB_KEY
 
 const store = new MongoDBStore({
     uri: MongoDBUri,

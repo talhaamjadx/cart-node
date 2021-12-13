@@ -1,0 +1,13 @@
+<%- include("./header.ejs") %>
+<form action="/signup" method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password">
+    <label for="password">Confirm Password</label>
+    <input type="password" name="confirm_password" id="confirm_password">
+    <button type="submit">Signup</button>
+</form>
+<%- include("./footer.ejs") %>

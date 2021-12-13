@@ -25,7 +25,7 @@ const booksRouter = require('./routes/books')
 
 const authRouter = require('./routes/auth')
 
-let globalUser = null;
+// let globalUser = null;
 
 // const User = require("./models/usersModel");
 const CartRouter = require('./routes/cart')
@@ -74,30 +74,6 @@ app.use(authRouter)
 app.use(mainRouter)
 
 mongoose.connect(MongoDBUri)
-    .then(() => {
-        return User.find()
-            .then(users => {
-                if (!users.length) {
-                    const user = new User({
-                        name: "Talha",
-                        email: "talhaamjadx@live.com",
-                        password: "iamnumber4",
-                        cart: { items: [] },
-                        orders: []
-                    })
-                    return user.save()
-                }
-                else {
-                    return new Promise(resolve => resolve(users[0]))
-                }
-            })
-            .then(user => {
-                globalUser = user
-            })
-            .catch(err => {
-                return new Promise((resolve, reject) => reject(err))
-            })
-    })
     .then(() => {
         app.listen(4000, () => console.log("Server is running on port 4000"))
     })

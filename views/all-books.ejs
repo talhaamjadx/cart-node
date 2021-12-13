@@ -18,13 +18,16 @@
                     <input type="text" name="price" value="<%= books[i].price %>" hidden>
                     <input type="text" name="description" value="<%= books[i].description %>" hidden>
                 </div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                 <button type="submit">Edit</button>
             </form>
             <form method="post" action="/books/book/delete/<%= books[i]._id %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                 <button type="submit">Delete</button>
             </form>
             <a href="/books/book/<%= books[i]._id %>">View</a>
             <form method="post" action="/cart/add/<%= books[i]._id %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                 <button type="submit">Add to cart</button>
             </form>
             <hr>

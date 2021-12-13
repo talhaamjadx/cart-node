@@ -24,9 +24,10 @@
                     <a href="/orders">Orders</a>
                     <% } %>
                         </div>
-                        <div>
+                        <div style="display: flex;">
                             <% if(!isLoggedIn){ %>
-                            <a href="/login">Login/Signup</a>
+                            <a href="/login">Login/</a>
+                            <a href="/signup">Signup</a>
                             <% } else{%>
                             <form action="/logout" method="post">
                                 <button type="submit">Logout</button>

@@ -19,7 +19,7 @@ exports.postLogin = (req, res, next) => {
     // res.setHeader("Set-Cookie", "loggedIn=true");
     User.findOne({ email: req.body.email })
         .then(user => {
-            let encryptedPass = crypto.createHmac('sha256', "mumbojumbo").update(req.body.password).digest('hex');
+            let encryptedPass = crypto.createHmac('sha256', process.env.ENCRYPTION_KEY).update(req.body.password).digest('hex');
             if (user.password === encryptedPass) {
                 req.session.isLoggedIn = true
                 req.session.user = user
@@ -46,7 +46,7 @@ exports.postSignup = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(foundUser => {
             if (!foundUser) {
-                let encryptedPass = crypto.createHmac('sha256', "mumbojumbo").update(req.body.password).digest('hex');
+                let encryptedPass = crypto.createHmac('sha256', process.env.ENCRYPTION_KEY).update(req.body.password).digest('hex');
                 const user = new User({ name: req.body.name, email: req.body.email, password: encryptedPass, cart: { items: [] }, orders: [] })
                 return user.save()
             }
@@ -92,7 +92,7 @@ exports.postNewPassword = (req, res, next) => {
             }
         })
         .then(user => {
-            user.password = crypto.createHmac('sha256', "mumbojumbo").update(req.body.new_password).digest('hex');
+            user.password = crypto.createHmac('sha256', process.env.ENCRYPTION_KEY).update(req.body.new_password).digest('hex');
             return user.save()
         })
         .then(() => {

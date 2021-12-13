@@ -7,7 +7,7 @@ exports.getOrdersController = (req, res, next) => {
     })
     .then(user => {
         console.log(user.orders[0].orderId.books)
-        res.render("orders", { orders: user.orders })
+        res.render("orders", { orders: user.orders, isLoggedIn: req.session.isLoggedIn })
     })
     .catch(err => {
         res.send(err)

@@ -1,4 +1,3 @@
-const { populate } = require("../models/booksModel");
 const Book = require("../models/booksModel");
 
 exports.addBookController = (req, res, next) => {
@@ -9,8 +8,13 @@ exports.fetchBooksController = (req, res, next) => {
     Book.find()
     .populate('userId')
     .then(result => {
-        console.log(result)
-        res.render('all-books', { books: result})
+        // let isLoggedIn = false
+        // let cookies = req.get("Cookie").split(";")
+        // for(let i = 0; i < cookies.length; i++){
+        //     if(cookies[i].trim().split("=")[1] === "true")
+        //         isLoggedIn = true
+        // }
+        res.render('all-books', { books: result, isLoggedIn: req.session.isLoggedIn})
     })
     .catch(err => {
         res.send(err)
@@ -20,7 +24,7 @@ exports.fetchBooksController = (req, res, next) => {
 exports.bookByIdController = (req, res, next) => {
     Book.findById(req.params.id)
     .then(result => {
-        res.render('single-book', { book: result })
+        res.render('single-book', { book: result, isLoggedIn: req.session.isLoggedIn })
     })
     .catch(err => {
         res.send(err)
@@ -28,7 +32,7 @@ exports.bookByIdController = (req, res, next) => {
 }
 
 exports.editBookController = (req, res, next) => {
-    res.render("edit-book", {book:req.body})
+    res.render("edit-book", {book:req.body, isLoggedIn: req.session.isLoggedIn})
 }
 
 exports.getEditBookController = (req, res, next) => {

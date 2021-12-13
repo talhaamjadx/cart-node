@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Books for sale</title>
 </head>
+
 <body>
-    <header>
-        <a href="/">Home</a>
-        <a href="/books/all-books">Books</a>
-        <a href="/books/add-book">Add Books</a>
-        <a href="/cart">Cart</a>
-        <a href="/orders">Orders</a>
+    <header style="display: flex; justify-content:space-between;">
+        <div>
+            <a href="/">Home</a>
+            <a href="/books/all-books">Books</a>
+            <% if(isLoggedIn){ %>
+                <a href="/books/add-book">Add Books</a>
+                <% } %>
+        </div>
+        <% if(isLoggedIn){ %>
+            <a href="/cart">Cart</a>
+            <% } %>
+                <% if(isLoggedIn){ %>
+                    <a href="/orders">Orders</a>
+                    <% } %>
+                        </div>
+                        <div>
+                            <% if(!isLoggedIn){ %>
+                            <a href="/login">Login/Signup</a>
+                            <% } else{%>
+                            <form action="/logout" method="post">
+                                <button type="submit">Logout</button>
+                            </form>
+                            <% } %>
+                        </div>
     </header>

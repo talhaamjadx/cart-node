@@ -3,7 +3,7 @@ const Book = require("../models/booksModel");
 exports.getCartController = (req, res, next) => {
     req.user.populate('cart.items.bookId')
     .then(user => {
-        res.render("cart", {books: user.cart.items, isLoggedIn: req.session.isLoggedIn})
+        res.render("cart", {books: user.cart.items})
     })    
     .catch(err => {
         console.log(err)

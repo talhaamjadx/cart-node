@@ -8,6 +8,7 @@
         <input type="text" name="price" value="<%= book.price %>">
         <label for="">Description</label>
         <input type="text" name="description" value="<%= book.description %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         <button type="submit">Edit</button>
     </form>
-<%- include("./footer.ejs") %>
+    <%- include("./footer.ejs") %>

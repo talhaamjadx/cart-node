@@ -1,30 +1,31 @@
 <%- include("./header.ejs") %>
     <h1>Cart</h1>
-    <% if(books.length > 0){ %>
-    <form method="post" action="/orders/create">
-        <button type="submit">Create Order</button>
-    </form>
-    <% } %>
-    <% if(!books.length){ %>
-        <p>Cart is empty</p>
-        <hr>
+    <% if(books.length> 0){ %>
+        <form method="post" action="/orders/create">
+            <button type="submit">Create Order</button>
+        </form>
         <% } %>
-            <% for(let i=0; i < books.length; i++){ %>
-                <div style="margin-bottom: 5px;">
-                    <p>Name: <%= books[i].bookId.name %>
-                    </p>
-                    <p>Author: <%= books[i].bookId.author %>
-                    </p>
-                    <p>Price: <%= books[i].bookId.price %>
-                    </p>
-                    <p>Description: <%= books[i].bookId.description %>
-                    </p>
-                    <p>Quantity: <%= books[i].quantity %>
-                    </p>
-                    <form method="post" action="/cart/remove-item/<%= books[i].bookId._id %>">
-                        <button type="submit">Delete</button>
-                    </form>
-                </div>
+            <% if(!books.length){ %>
+                <p>Cart is empty</p>
                 <hr>
                 <% } %>
-                    <%- include("./footer.ejs") %>
+                    <% for(let i=0; i < books.length; i++){ %>
+                        <div style="margin-bottom: 5px;">
+                            <p>Name: <%= books[i].bookId.name %>
+                            </p>
+                            <p>Author: <%= books[i].bookId.author %>
+                            </p>
+                            <p>Price: <%= books[i].bookId.price %>
+                            </p>
+                            <p>Description: <%= books[i].bookId.description %>
+                            </p>
+                            <p>Quantity: <%= books[i].quantity %>
+                            </p>
+                            <form method="post" action="/cart/remove-item/<%= books[i].bookId._id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                        <hr>
+                        <% } %>
+                            <%- include("./footer.ejs") %>

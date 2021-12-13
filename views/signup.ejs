@@ -8,6 +8,7 @@
     <input type="password" name="password" id="password">
     <label for="password">Confirm Password</label>
     <input type="password" name="confirm_password" id="confirm_password">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
     <button type="submit">Signup</button>
 </form>
 <%- include("./footer.ejs") %>

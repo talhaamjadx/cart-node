@@ -1,6 +1,6 @@
 exports.mainController = (req, res, next) => {
     console.log(req.session, "session")
-    res.render('index', { isLoggedIn: req.session.isLoggedIn })
+    res.render('index')
 }
 
 exports._404Controller = (req, res, next) => {

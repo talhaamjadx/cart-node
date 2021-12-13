@@ -2,7 +2,7 @@ const User = require("../models/usersModel");
 const crypto = require("crypto");
 
 exports.getLogin = (req, res, next) => {
-    res.render("login", { isLoggedIn: req.session.isLoggedIn })
+    res.render("login")
 }
 
 exports.postLogin = (req, res, next) => {
@@ -29,7 +29,7 @@ exports.postLogin = (req, res, next) => {
 }
 
 exports.getSignup = (req, res, next) => {
-    res.render("signup", { isLoggedIn: req.session.isLoggedIn })
+    res.render("signup")
 }
 
 exports.postSignup = (req, res, next) => {

@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 
 const path = require("path")
 
+const csrf = require("csurf");
+
 const session = require("express-session");
 
 const MongoDBStore = require("connect-mongodb-session")(session)
@@ -14,6 +16,8 @@ const store = new MongoDBStore({
     uri: MongoDBUri,
     collection: "sessions"
 })
+
+const csrfProtection = csrf()
 
 const mongoose = require("mongoose")
 
@@ -34,6 +38,12 @@ const OrderRouter = require('./routes/orders')
 
 // const mongoClient = require("./utils/database").mongoClient;
 
+app.use(express.static(path.join(__dirname, 'public')))
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
+//always add csrf protection middleware after the bodyparser middleware
+
 app.use(session({
     secret: "monica belluci",
     resave: false,
@@ -41,9 +51,13 @@ app.use(session({
     store: store
 }))
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(csrfProtection)
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = req.session.isLoggedIn
+    res.locals.csrfToken = req.csrfToken()
+    next()
+})
 
 app.set("views", "views")
 

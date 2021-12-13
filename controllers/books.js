@@ -1,7 +1,7 @@
 const Book = require("../models/booksModel");
 
 exports.addBookController = (req, res, next) => {
-    res.render("add-book", { isLoggedIn: req.session.isLoggedIn })
+    res.render("add-book")
 }
 
 exports.fetchBooksController = (req, res, next) => {
@@ -14,7 +14,7 @@ exports.fetchBooksController = (req, res, next) => {
             //     if(cookies[i].trim().split("=")[1] === "true")
             //         isLoggedIn = true
             // }
-            res.render('all-books', { books: result, isLoggedIn: req.session.isLoggedIn })
+            res.render('all-books', { books: result })
         })
         .catch(err => {
             res.send(err)
@@ -24,7 +24,7 @@ exports.fetchBooksController = (req, res, next) => {
 exports.bookByIdController = (req, res, next) => {
     Book.findById(req.params.id)
         .then(result => {
-            res.render('single-book', { book: result, isLoggedIn: req.session.isLoggedIn })
+            res.render('single-book', { book: result })
         })
         .catch(err => {
             res.send(err)
@@ -32,7 +32,7 @@ exports.bookByIdController = (req, res, next) => {
 }
 
 exports.editBookController = (req, res, next) => {
-    res.render("edit-book", { book: req.body, isLoggedIn: req.session.isLoggedIn })
+    res.render("edit-book", { book: req.body })
 }
 
 exports.getEditBookController = (req, res, next) => {

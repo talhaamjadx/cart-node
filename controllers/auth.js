@@ -1,4 +1,5 @@
 const User = require("../models/usersModel");
+const fs = require("fs");
 const ResetToken = require("../models/resetTokensModel");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -62,14 +63,21 @@ exports.postSignup = (req, res, next) => {
             else
                 throw new Error("User already exists")
         })
-        .then(result => {
-            console.log(result)
+        .then(async () => {
+            let html = await new Promise((resolve, reject) => {
+                fs.readFile("./emails/welcome.html", (err, data) => {
+                    if (!err)
+                        resolve(data.toString());
+                    else
+                        reject("error in reading file")
+                })
+            })
             res.redirect("/login")
             return transporter.sendMail({
                 to: req.body.email,
                 from: "talhaamjadx@live.com",
-                subject: "Testing email. Does it work?",
-                html: "<h1>This is a heading</h1>"
+                subject: "Welcome!",
+                html: html
             })
         })
         .catch(err => {
@@ -133,12 +141,21 @@ exports.postResetPassword = async (req, res, next) => {
         email: req.body.email
     })
     resetToken.save()
-        .then(() => {
+        .then(async () => {
+            let html = await new Promise((resolve, reject) => {
+                fs.readFile("./emails/reset-password.html", (err, data) => {
+                    if (!err)
+                        resolve(data.toString());
+                    else
+                        reject("error in reading file")
+                })
+            })
+            html = html.replace("${token}", token)
             transporter.sendMail({
                 to: req.body.email,
                 from: "talhaamjadx@live.com",
                 subject: "Password Reset",
-                html: `<div><p>Click here to reset your password</p><a href='http://localhost:4000/new-password?token=${token}' target='_blank'>Reset Password!</a></div>`
+                html: html
             })
             res.send("An email has been sent to your email!")
         })

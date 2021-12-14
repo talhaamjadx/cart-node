@@ -1,5 +1,4 @@
 exports.mainController = (req, res, next) => {
-    console.log(req.session, "session")
     res.render('index')
 }
 

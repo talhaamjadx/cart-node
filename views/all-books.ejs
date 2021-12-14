@@ -2,35 +2,40 @@
     <div>
         <h1>Books</h1>
         <% if(!books.length){ %>
-        <p>No books</p>
-        <hr>
-        <% } %>
-        <% for(let i=0; i < books.length; i++){ %>
-            <form style="margin-bottom: 5px;" method="post" action="/books/book/edit/<%= books[i]._id %>">
-                <div>
-                    <label for="">Name: <%= books[i].name %></label>
-                    <label for="">Author: <%= books[i].author %></label>
-                    <label for="">Price: <%= books[i].price %></label>
-                    <label for="">Description: <%= books[i].description %></label>
-                    <input type="text" name="id" value="<%= books[i]._id %>" hidden>
-                    <input type="text" name="name" value="<%= books[i].name %>" hidden>
-                    <input type="text" name="author" value="<%= books[i].author %>" hidden>
-                    <input type="text" name="price" value="<%= books[i].price %>" hidden>
-                    <input type="text" name="description" value="<%= books[i].description %>" hidden>
-                </div>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                <button type="submit">Edit</button>
-            </form>
-            <form method="post" action="/books/book/delete/<%= books[i]._id %>">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                <button type="submit">Delete</button>
-            </form>
-            <a href="/books/book/<%= books[i]._id %>">View</a>
-            <form method="post" action="/cart/add/<%= books[i]._id %>">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                <button type="submit">Add to cart</button>
-            </form>
+            <p>No books</p>
             <hr>
             <% } %>
+            <div style="display: flex;">
+                <% for(let i=0; i < books.length; i++){ %>
+                    <form style="margin-bottom: 5px;" method="post" action="/books/book/edit/<%= books[i]._id %>">
+                        <img height="200" src="/<%= books[i].image %>" alt="<%= books[i].name %>">
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="">Name: <%= books[i].name %></label>
+                            <label for="">Author: <%= books[i].author %></label>
+                            <label for="">Price: <%= books[i].price %></label>
+                            <label for="">Description: <%= books[i].description %></label>
+                            <input type="text" name="id" value="<%= books[i]._id %>" hidden>
+                            <input type="text" name="name" value="<%= books[i].name %>" hidden>
+                            <input type="text" name="author" value="<%= books[i].author %>" hidden>
+                            <input type="text" name="price" value="<%= books[i].price %>" hidden>
+                            <input type="text" name="description" value="<%= books[i].description %>" hidden>
+                        </div>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button type="submit">Edit</button>
+                    </form>
+                    <div>
+                        <form method="post" action="/books/book/delete/<%= books[i]._id %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                            <button type="submit">Delete</button>
+                        </form>
+                        <button style="margin-top: 5px;"><a href="/books/book/<%= books[i]._id %>">View</a></button>
+                        <form style="margin-top: 5px;" method="post" action="/cart/add/<%= books[i]._id %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                            <button type="submit">Add to cart</button>
+                        </form>
+                    </div>
+                    <hr>
+                    <% } %>
+                </div>
     </div>
-<%- include("./footer.ejs") %>
+    <%- include("./footer.ejs") %>

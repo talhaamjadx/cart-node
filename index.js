@@ -2,6 +2,24 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
+const multer = require("multer");
+
+const fileStorage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, "images")
+    },
+    filename: (req, file, callback) => {
+        callback(null, file.originalname)
+    }
+})
+
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        callback(null, true)
+    }
+    else
+        callback(null, false)
+}
 
 const path = require("path")
 
@@ -17,7 +35,7 @@ const store = new MongoDBStore({
     uri: MongoDBUri,
     collection: "sessions"
 })
-                                                            
+
 const csrfProtection = csrf()
 
 const mongoose = require("mongoose")
@@ -41,9 +59,12 @@ const OrderRouter = require('./routes/orders')
 
 // const mongoClient = require("./utils/database").mongoClient;
 
-app.use(express.static(path.join(__dirname, 'public')))
-
 app.use(bodyParser.urlencoded({ extended: false }))
+
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'))
+
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 //always add csrf protection middleware after the bodyparser middleware
 

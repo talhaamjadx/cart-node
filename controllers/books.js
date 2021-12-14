@@ -71,13 +71,15 @@ exports.deleteBookController = (req, res, next) => {
 }
 
 exports.saveBookController = (req, res, next) => {
-    const book = new Book({ name: req.body.bookName, author: req.body.bookAuthor, price: req.body.bookPrice, description: req.body.bookDescription, userId: req.user })
+    console.log("here")
+    const book = new Book({ name: req.body.bookName, author: req.body.bookAuthor, price: req.body.bookPrice, description: req.body.bookDescription, userId: req.user, image: req.file.path })
     book.save()
         .then(result => {
-            console.log(result)
+            console.log(result, "result")
             res.redirect("/books/all-books")
         })
         .catch(err => {
+            console.log(err, "in add book")
             const error = new Error(err)
             error.httpStatusCode = 500
             return next(error)

@@ -1,11 +1,12 @@
 <%- include("./header.ejs") %>
 <div>
-    <form method="post" action="/books/add-book">
+    <form method="post" action="/books/add-book" enctype="multipart/form-data">
     <h1>Add Book</h1>
-        <input type="text" name="bookName" id="bookName"/>
-        <input type="text" name="bookAuthor" id="bookAuthor"/>
-        <input type="text" name="bookPrice" id="bookPrice"/>
-        <input type="text" name="bookDescription" id="bookDescription"/>
+        <input type="text" name="bookName" id="bookName" placeholder="Name"/>
+        <input type="text" name="bookAuthor" id="bookAuthor" placeholder="Author"/>
+        <input type="text" name="bookPrice" id="bookPrice" placeholder="Price"/>
+        <input type="text" name="bookDescription" id="bookDescription" placeholder="Description"/>
+        <input type="file" name="image"/>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button>Add</button>
     </form>

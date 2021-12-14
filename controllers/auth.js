@@ -5,6 +5,8 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sendGridTransport = require("nodemailer-sendgrid-transport")
 
+const { validationResult } = require("express-validator")
+
 const transporter = nodemailer.createTransport(sendGridTransport({
     auth: {
         api_key: process.env.SENDGRID_KEY
@@ -16,7 +18,11 @@ exports.getLogin = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
+    const errors = validationResult(req)
     // res.setHeader("Set-Cookie", "loggedIn=true");
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() })
+    }
     User.findOne({ email: req.body.email })
         .then(user => {
             let encryptedPass = crypto.createHmac('sha256', process.env.ENCRYPTION_KEY).update(req.body.password).digest('hex');
@@ -43,6 +49,10 @@ exports.getSignup = (req, res, next) => {
 }
 
 exports.postSignup = (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() })
+    }
     User.findOne({ email: req.body.email })
         .then(foundUser => {
             if (!foundUser) {

@@ -1,5 +1,5 @@
 <%- include("./header.ejs")  %>
-    <form style="margin-top: 10px;" method="post" action="/login">
+    <form style="margin-top: 10px;" method="post" action="/login" novalidate>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
         <label for="email">Email</label>
         <input type="email" name="email">

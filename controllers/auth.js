@@ -39,8 +39,9 @@ exports.postLogin = (req, res, next) => {
                 throw new Error("Password is incorrect!")
         })
         .catch(err => {
-            console.log(err)
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -81,8 +82,9 @@ exports.postSignup = (req, res, next) => {
             })
         })
         .catch(err => {
-            console.log(err)
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -119,7 +121,9 @@ exports.postNewPassword = (req, res, next) => {
             res.send("password updated")
         })
         .catch(err => {
-            console.log(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -160,6 +164,8 @@ exports.postResetPassword = async (req, res, next) => {
             res.send("An email has been sent to your email!")
         })
         .catch(err => {
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }

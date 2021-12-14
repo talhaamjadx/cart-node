@@ -30,6 +30,8 @@ const booksRouter = require('./routes/books')
 
 const authRouter = require('./routes/auth')
 
+const errorRouter = require('./routes/errors')
+
 // let globalUser = null;
 
 // const User = require("./models/usersModel");
@@ -86,7 +88,15 @@ app.use(OrderRouter)
 
 app.use(authRouter)
 
+app.use(errorRouter)
+
 app.use(mainRouter)
+
+//error middleware
+app.use((error, req, res, next) => {
+    console.log(error)
+    res.redirect('/error')
+})
 
 mongoose.connect(MongoDBUri)
     .then(() => {

@@ -10,7 +10,9 @@ exports.getOrdersController = (req, res, next) => {
         res.render("orders", { orders: user.orders })
     })
     .catch(err => {
-        res.send(err)
+        const error = new Error(err)
+        error.httpStatusCode = 500
+        return next(error)
     })
 }
 
@@ -21,7 +23,8 @@ exports.createOrderController = (req, res, next) => {
         res.redirect('/orders')
     })
     .catch(err => {
-        console.log(err)
-        res.send(err)
+        const error = new Error(err)
+        error.httpStatusCode = 500
+        return next(error)
     })
 }

@@ -6,7 +6,9 @@ exports.getCartController = (req, res, next) => {
         res.render("cart", {books: user.cart.items})
     })    
     .catch(err => {
-        console.log(err)
+        const error = new Error(err)
+        error.httpStatusCode = 500
+        return next(error)
     })
 }
 
@@ -16,7 +18,9 @@ exports.cartItemRemoveController = (req, res, next) => {
         res.redirect('/cart')
     })
     .catch(err => {
-        res.send(err)
+        const error = new Error(err)
+        error.httpStatusCode = 500
+        return next(error)
     })
 }
 
@@ -31,7 +35,8 @@ exports.addBookToCartController = (req, res, next) => {
             res.redirect("/cart")
         })
         .catch(err => {
-            console.log(err)
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }

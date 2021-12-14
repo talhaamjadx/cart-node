@@ -17,7 +17,9 @@ exports.fetchBooksController = (req, res, next) => {
             res.render('all-books', { books: result })
         })
         .catch(err => {
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -27,7 +29,9 @@ exports.bookByIdController = (req, res, next) => {
             res.render('single-book', { book: result })
         })
         .catch(err => {
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -48,8 +52,9 @@ exports.getEditBookController = (req, res, next) => {
             res.redirect('/books/book/' + req.params.id)
         })
         .catch(err => {
-            console.log(err)
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -59,7 +64,9 @@ exports.deleteBookController = (req, res, next) => {
             res.redirect('/books/all-books')
         })
         .catch(err => {
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -71,7 +78,8 @@ exports.saveBookController = (req, res, next) => {
             res.redirect("/books/all-books")
         })
         .catch(err => {
-            console.log(err)
-            res.send(err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }

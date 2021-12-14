@@ -1,5 +1,4 @@
 const User = require("../models/usersModel");
-const { generate_token } = require("../utils/index");
 const ResetToken = require("../models/resetTokensModel");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -120,8 +119,15 @@ exports.getNewPassword = (req, res, next) => {
     res.render("new-password", { token: req.query.token })
 }
 
-exports.postResetPassword = (req, res, next) => {
-    const token = generate_token(20);
+exports.postResetPassword = async (req, res, next) => {
+    let token = await new Promise((resolve, reject) => {
+        crypto.randomBytes(32, (err, buff) => {
+            if (!err)
+                resolve(buff.toString('hex'))
+            else
+                reject("error in hashing token")
+        })
+    })
     const resetToken = new ResetToken({
         token: token,
         email: req.body.email

@@ -48,6 +48,8 @@ const booksRouter = require('./routes/books')
 
 const authRouter = require('./routes/auth')
 
+const paymentRouter = require('./routes/payment')
+
 const errorRouter = require('./routes/errors')
 
 // let globalUser = null;
@@ -108,6 +110,8 @@ app.use(CartRouter)
 app.use(OrderRouter)
 
 app.use(authRouter)
+
+app.use(paymentRouter)
 
 app.use(errorRouter)
 

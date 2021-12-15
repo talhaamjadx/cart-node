@@ -13,4 +13,7 @@
             <hr>
             <% } %>
     </div>
+    <% if(orders.length){ %>
+    <a href="/checkout">Create Order</a>
+    <% } %>
     <%- include("./footer.ejs") %>

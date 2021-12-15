@@ -1,0 +1,55 @@
+<%- include("./header.ejs") %>
+    <div>
+        <h1>Checkout</h1>
+        <form method="post" action="/checkout" id="payment-form">
+            <div id="card-element"></div>
+            <button id="submit" type="submit">
+                <div class="spinner hidden" id="spinner"></div>
+                <span id="button-text">Pay now</span>
+            </button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <input type="hidden" name="token" id="token">
+            <div id="card-error"></div>
+        </form>
+    </div>
+    <script>
+        var stripe = Stripe('pk_test_51K6bCiArdqea4ukq3lhPWfxHmhMs00dDmq2JLGqzSOIoBa0pjmZoYbl7YGy1RzcK10VBLFpdQBUCpDX1XaVPkKfs00FswTuhDI');
+        var elements = stripe.elements();
+        var style = {
+            base: {
+                color: "#32325d",
+                fontFamily: 'Arial, sans-serif',
+                fontSmoothing: "antialiased",
+                fontSize: "16px",
+                "::placeholder": {
+                    color: "#32325d"
+                }
+            },
+            invalid: {
+                fontFamily: 'Arial, sans-serif',
+                color: "#fa755a",
+                iconColor: "#fa755a"
+            }
+        };
+
+        var card = elements.create("card", { style: style });
+        card.mount("#card-element");
+        card.mount("#card-element");
+        card.on("change", function (event) {
+            document.querySelector("button").disabled = event.empty;
+            document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+        });
+        document.querySelector("#payment-form").addEventListener('submit', e => {
+            stripe.createToken(card).then(function (result) {
+                document.querySelector("#token").value = result.token.id
+                const form = document.querySelector("#payment-form")
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form),
+                });
+            });
+
+            e.preventDefault()
+        })
+    </script>
+    <%- include("./footer.ejs") %>
